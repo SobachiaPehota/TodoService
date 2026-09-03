@@ -81,7 +81,8 @@ public class DataSyncService : BackgroundService
 
         var dummyTodos = await dummyJsonService.GetTodosAsync();
         _logger.LogInformation($"Received {dummyTodos.Count} todos from DummyJSON");
-        var todosForCurrentUsers = dummyTodos.Where(x => dummyUsers.Select(x => x.Id).Contains(x.UserId));
+        var userIds = dummyUsers.Select(x => x.Id).ToHashSet();
+        var todosForCurrentUsers = dummyTodos.Where(x => userIds.Contains(x.UserId));
 
         foreach (var dummyTodo in todosForCurrentUsers)
         {
